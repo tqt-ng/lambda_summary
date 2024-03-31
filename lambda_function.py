@@ -1,13 +1,10 @@
-import boto3, os
-from dotenv import load_dotenv, find_dotenv
-import json 
+import boto3
+import os
+import json
 from jinja2 import Template
 
 s3_client = boto3.client('s3')
 bedrock_runtime = boto3.client('bedrock-runtime', 'us-west-2')
-
-_ = load_dotenv(find_dotenv()) # read local .env file
-output_bucket = os.environ['OUTPUT_BUCKET']
 
 def lambda_handler(event, context):
     
@@ -18,8 +15,8 @@ def lambda_handler(event, context):
         print("This app only works with .txt files.")
         return
 
-
     try: 
+
         file_content = ""
         
         response = s3_client.get_object(Bucket=bucket, Key=key)
@@ -31,7 +28,7 @@ def lambda_handler(event, context):
         summary = bedrock_summarization(file_content)
         
         s3_client.put_object(
-            Bucket=output_bucket,
+            Bucket=os.environ['OUTPUT_BUCKET'],
             Key=f"result-{key}",
             Body=summary,
             ContentType='text/plain'
@@ -85,5 +82,4 @@ def bedrock_summarization(file_content):
 
     summary = json.loads(response.get('body').read()).get('results')[0].get('outputText')    
     return summary
-    
     
