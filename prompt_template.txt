@@ -1,0 +1,19 @@
+I need to summarize a document. The full document is between the <data> XML like tags.
+
+<data>
+{{text}}
+</data>
+
+The summary must be no longer than 5 sentences. 
+The output must contain a list of 3 keywords and a summary, 
+and must be provided in JSON format as shown in the following example. 
+
+Example output:
+{
+    "keywords": <keywords>,
+    "summary": <summary>
+}
+
+Return only the JSON output and nothing more.
+
+Here is the JSON output:
